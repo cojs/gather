@@ -1,6 +1,6 @@
 {
   "name": "co-gather",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Execute thunks in parallel with concurrency support and gather all the results",
   "main": "index.js",
   "scripts": {
