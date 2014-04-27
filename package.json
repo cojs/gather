@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/dead-horse/co-gather.git"
+    "url": "git://github.com/cojs/gather.git"
   },
   "files": [
     "index.js"
@@ -22,9 +22,9 @@
   "author": "dead_horse <dead_horse@qq.com> (http://deadhorse.me)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dead-horse/co-gather/issues"
+    "url": "https://github.com/cojs/gather/issues"
   },
-  "homepage": "https://github.com/dead-horse/co-gather",
+  "homepage": "https://github.com/cojs/gather",
   "devDependencies": {
     "co": "^3.0.2",
     "co-wait": "^0.0.0"
