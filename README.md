@@ -15,7 +15,6 @@ $ npm install co-gather
 
 ```js
 var gather = require('co-gather');
-var thread = require('co-thread');
 var wait = require('co-wait');
 var co = require('co');
 
@@ -30,7 +29,14 @@ function *random() {
 }
 
 co(function *() {
-  var ret = yield gather(thread(random, 10));
+  var thunks = [
+    random,
+    random,
+    random,
+    random,
+    random
+  ];
+  var ret = yield gather(thunks);
   console.log(ret);
 })();
 ```
@@ -39,16 +45,11 @@ co(function *() {
 
 ```
 [
+  { isError: false, value: 0 },
   { isError: true, error: [Error: error] },
   { isError: true, error: [Error: error] },
   { isError: true, error: [Error: error] },
-  { isError: true, error: [Error: error] },
-  { isError: true, error: [Error: error] },
-  { isError: false, value: 5 },
-  { isError: false, value: 6 },
-  { isError: false, value: 7 },
-  { isError: true, error: [Error: error] },
-  { isError: true, error: [Error: error] }
+  { isError: false, value: 4 }
 ]
 ```
 

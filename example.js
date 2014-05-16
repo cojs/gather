@@ -1,6 +1,5 @@
 
 var gather = require('./');
-var thread = require('co-thread');
 var wait = require('co-wait');
 var co = require('co');
 
@@ -15,6 +14,13 @@ function *random() {
 }
 
 co(function *() {
-  var ret = yield gather(thread(random, 10));
+  var thunks = [
+    random,
+    random,
+    random,
+    random,
+    random
+  ];
+  var ret = yield gather(thunks);
   console.log(ret);
 })();
