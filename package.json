@@ -4,7 +4,8 @@
   "description": "Execute thunks in parallel with concurrency support and gather all the results",
   "main": "index.js",
   "scripts": {
-    "test": "make test"
+    "test": "egg-bin test",
+    "ci": "egg-bin cov"
   },
   "repository": {
     "type": "git",
@@ -25,11 +26,15 @@
     "url": "https://github.com/cojs/gather/issues"
   },
   "homepage": "https://github.com/cojs/gather",
-  "devDependencies": {
-    "co": "^3.0.2",
-    "co-wait": "^0.0.0"
-  },
   "dependencies": {
-    "co-thread": "0.0.1"
+    "co": "^4.6.0"
+  },
+  "devDependencies": {
+    "egg-bin": "^4.7.1",
+    "egg-ci": "^1.8.0",
+    "mz-modules": "^2.1.0"
+  },
+  "ci": {
+    "version": "8, 10"
   }
 }
