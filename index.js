@@ -1,36 +1,39 @@
-/*!
- * co-gather - index.js
- * Copyright(c) 2014 dead_horse <dead_horse@qq.com>
- * MIT Licensed
- */
-
 'use strict';
 
-/**
- * Module dependencies.
- */
+const assert = require('assert');
 
-var thread = require('co-thread');
+module.exports = function (funcs, n) {
+  assert(Array.isArray(funcs), 'funcs must be array');
+  n = n || 5;
 
-module.exports = function *gather(thunks, n){
-  n = Math.min(n || 5, thunks.length);
-  var ret = [];
-  var index = 0;
-
-  function *next() {
-    var i = index++;
-    ret[i] = {isError: false};
-    try {
-      ret[i].value = yield thunks[i];
-    } catch (err) {
-      ret[i].error = err;
-      ret[i].isError = true;
+  return new Promise(resolve => {
+    const results = [];
+    let index = 0;
+    let finish = 0;
+    for (let i = 0; i < n; i++) {
+      run();
     }
 
-    if (index < thunks.length) yield next;
-  }
+    function run() {
+      const i = index++;
+      console.log(i);
+      let ins = funcs[i];
+      if (!ins) return;
 
-  yield thread(next, n);
+      if (typeof ins === 'function') ins = ins();
+      if (ins && typeof ins.next === 'function' && typeof ins.throw === 'function') ins = require('co')(ins);
 
-  return ret;
+      ins.then(res => {
+          results[i] = { value: res };
+        }, err => {
+          results[i] = { error: err, isError: true };
+          results[i].isError = true;
+          results[i].error = err;
+        })
+        .then(() => {
+          if (++finish >= funcs.length) return resolve(results);
+          run();
+        });
+    }
+  });
 };
