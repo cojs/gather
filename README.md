@@ -14,7 +14,7 @@ $ npm install co-gather
 ## Example
 
 ```js
-var gather = require('./');
+const gather = require('./');
 const sleep = require('mz-modules/sleep');
 
 function* gfun(result, error, interval) {
@@ -36,11 +36,9 @@ gather([
   async () => afun(null, 'error'),
   () => afun(4),
 ], 2).then(res => {
-
-console.timeEnd('gather');
-console.log(res);
+  console.timeEnd('gather');
+  console.log(res);
 });
-
 ```
 
 =>

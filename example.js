@@ -1,26 +1,27 @@
+'use strict';
 
-var gather = require('./');
-var wait = require('co-wait');
-var co = require('co');
+const gather = require('./');
+const sleep = require('mz-modules/sleep');
 
-var index = 0;
-function *random() {
-  var i = index++;
-  yield wait(Math.random() * 100);
-  if (Math.random() > 0.5) {
-    throw new Error('error');
-  }
-  return i;
+function* gfun(result, error, interval) {
+  yield sleep(interval || 100);
+  if (error) throw new Error(error);
+  return result;
 }
 
-co(function *() {
-  var thunks = [
-    random,
-    random,
-    random,
-    random,
-    random
-  ];
-  var ret = yield gather(thunks);
-  console.log(ret);
-})();
+async function afun(result, error, interval) {
+  await sleep(interval || 100);
+  if (error) throw new Error(error);
+  return result;
+}
+
+console.time('gather');
+gather([
+  gfun(1),
+  gfun(null, 'error'),
+  async () => afun(null, 'error'),
+  () => afun(4),
+], 2).then(res => {
+  console.timeEnd('gather');
+  console.log(res);
+});
