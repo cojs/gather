@@ -35,6 +35,6 @@
     "mz-modules": "^2.1.0"
   },
   "ci": {
-    "versions": "8, 10"
+    "version": "8, 10"
   }
 }

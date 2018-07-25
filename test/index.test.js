@@ -53,15 +53,64 @@ describe('co-gather', () => {
     around(use, 100);
   });
 
-  it.only('should work when n = 1', async () => {
+  it('should work when n = 1', async () => {
     const start = Date.now();
     const res = await gather([
       gfun(1),
       gfun(2),
       gfun(3),
-    ]);
+    ], 1);
     const use = Date.now() - start;
     assert.deepEqual(res, [{ value: 1 }, { value: 2 }, { value: 3 } ]);
+    around(use, 300);
+  });
+
+  it('should work with error', async () => {
+    const start = Date.now();
+    const res = await gather([
+      gfun(null, 'error'),
+      gfun(null, 'error'),
+      gfun(3),
+    ], 1);
+    const use = Date.now() - start;
+    assert(res[0].isError);
+    assert(res[0].error.message === 'error');
+    assert(res[1].isError);
+    assert(res[1].error.message === 'error');
+    assert(res[2].value === 3);
+    around(use, 300);
+  });
+
+  it('should work with async function', async () => {
+    const start = Date.now();
+    const res = await gather([
+      async () => afun(null, 'error'),
+      async () => afun(null, 'error'),
+      async () => afun(3),
+    ], 1);
+    const use = Date.now() - start;
+    assert(res[0].isError);
+    assert(res[0].error.message === 'error');
+    assert(res[1].isError);
+    assert(res[1].error.message === 'error');
+    assert(res[2].value === 3);
+    around(use, 300);
+  });
+
+  it('should work with promise', async () => {
+    const start = Date.now();
+    const res = await gather([
+      afun(null, 'error', 300),
+      afun(null, 'error', 100),
+      afun(3, null, 200),
+    ], 1);
+    const use = Date.now() - start;
+    assert(res[0].isError);
+    assert(res[0].error.message === 'error');
+    assert(res[1].isError);
+    assert(res[1].error.message === 'error');
+    assert(res[2].value === 3);
+    // notice: promise will start at once
     around(use, 300);
   });
 });
