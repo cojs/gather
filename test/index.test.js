@@ -4,13 +4,13 @@ const sleep = require('mz-modules/sleep');
 const assert = require('assert');
 const gather = require('../');
 
-const gfun = function* (result, error, interval) {
+function* gfun(result, error, interval) {
   yield sleep(interval || 100);
   if (error) throw new Error(error);
   return result;
 }
 
-const afun = async function(result, error, interval) {
+async function afun(result, error, interval) {
   await sleep(interval || 100);
   if (error) throw new Error(error);
   return result;
@@ -25,7 +25,7 @@ describe('co-gather', () => {
       gfun(3),
     ], 2);
     const use = Date.now() - start;
-    assert.deepEqual(res, [ { value: 1 }, { value: 2}, { value: 3} ]);
+    assert.deepEqual(res, [ { isError: false, isError: false, value: 1 }, { isError: false, value: 2}, { isError: false, value: 3} ]);
     around(use, 200);
   });
 
@@ -37,7 +37,7 @@ describe('co-gather', () => {
       gfun(3, null, 200),
     ], 2);
     const use = Date.now() - start;
-    assert.deepEqual(res, [{ value: 1 }, { value: 2 }, { value: 3 }]);
+    assert.deepEqual(res, [{ isError: false, value: 1 }, { isError: false, value: 2 }, { isError: false, value: 3 }]);
     around(use, 500);
   });
 
@@ -49,7 +49,7 @@ describe('co-gather', () => {
       gfun(3),
     ]);
     const use = Date.now() - start;
-    assert.deepEqual(res, [{ value: 1 }, { value: 2 }, { value: 3 }]);
+    assert.deepEqual(res, [{ isError: false, value: 1 }, { isError: false, value: 2 }, { isError: false, value: 3 }]);
     around(use, 100);
   });
 
@@ -61,7 +61,7 @@ describe('co-gather', () => {
       gfun(3),
     ], 1);
     const use = Date.now() - start;
-    assert.deepEqual(res, [{ value: 1 }, { value: 2 }, { value: 3 } ]);
+    assert.deepEqual(res, [{ isError: false, value: 1 }, { isError: false, value: 2 }, { isError: false, value: 3 } ]);
     around(use, 300);
   });
 
