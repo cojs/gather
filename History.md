@@ -1,4 +1,10 @@
 
+1.0.1 / 2020-03-11
+==================
+
+**fixes**
+  * [[`96755ff`](http://github.com/cojs/gather/commit/96755ffe9443639d7391ab034bb2419fe5cb71db)] - fix: empty input empty output (dead-horse <<dead_horse@qq.com>>)
+
 1.0.0 / 2018-07-25
 ==================
 
