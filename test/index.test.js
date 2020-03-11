@@ -113,6 +113,16 @@ describe('co-gather', () => {
     // notice: promise will start at once
     around(use, 300);
   });
+
+  it('should work with empty array', async () => {
+    const res = await gather([]);
+    assert.deepEqual(res, []);
+  });
+
+  it('should work with undefined item', async () => {
+    const res = await gather([ undefined, afun(3, null, 200) ]);
+    assert.deepEqual(res, [ undefined, { value: 3, isError: false } ]);
+  });
 });
 
 function around(a, b) {
