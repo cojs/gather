@@ -37,6 +37,8 @@ gather([
 
 - async function
 
+> Notice: You must pass async functions or functions return promise. If a promise is passed, it will start executing when it's created, and there's no way to control concurrency through gather.
+
 ```js
 const gather = require('./');
 const sleep = require('mz-modules/sleep');
