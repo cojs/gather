@@ -13,17 +13,35 @@ $ npm install co-gather
 
 ## Example
 
+- generator function
+
 ```js
 const gather = require('./');
 const sleep = require('mz-modules/sleep');
 
-function* gfun(result, error, interval) {
+function* fun(result, error, interval) {
   yield sleep(interval || 100);
   if (error) throw new Error(error);
   return result;
 }
 
-async function afun(result, error, interval) {
+console.time('gather');
+gather([
+  fun(1),
+  fun(null, 'error'),
+], 2).then(res => {
+  console.timeEnd('gather');
+  console.log(res);
+});
+```
+
+- async function
+
+```js
+const gather = require('./');
+const sleep = require('mz-modules/sleep');
+
+async function fun(result, error, interval) {
   await sleep(interval || 100);
   if (error) throw new Error(error);
   return result;
@@ -31,24 +49,19 @@ async function afun(result, error, interval) {
 
 console.time('gather');
 gather([
-  gfun(1),
-  gfun(null, 'error'),
-  async () => afun(null, 'error'),
-  () => afun(4),
+  () => fun(1),
+  async () => fun(null, 'error'),
 ], 2).then(res => {
   console.timeEnd('gather');
   console.log(res);
 });
 ```
-
 =>
 
 ```
 [
   { isError: false, value: 1 },
-  { isError: true, error: [Error: error] },
-  { isError: true, error: [Error: error] },
-  { isError: false, value: 4 }
+  { isError: true, error: [Error: error] }
 ]
 ```
 
